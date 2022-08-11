@@ -29,7 +29,7 @@ class StringExtractor {
 		$translations = new Translations;
 		$file_names = (array) scandir( '.' );
 		foreach ( $file_names as $file_name ) {
-			if ( '.' == $file_name || '..' == $file_name ) {
+			if ( '.' == $file_name || '..' == $file_name || ! is_file( $file_name ) ) {
 				continue;
 			}
 			if ( preg_match( '/\.php|vue|js$/', $file_name ) && $this->does_file_name_match( $prefix . $file_name, $excludes, $includes ) ) {
@@ -205,6 +205,7 @@ class StringExtractor {
 		$function_calls = array();
 		$latest_comment = false;
 		$in_func = false;
+        $current_argument_is_just_literal = '';
 		foreach( $tokens as $token ) {
 			$id = $text = null;
 			if ( is_array( $token ) ) {
